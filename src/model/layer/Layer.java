@@ -37,6 +37,16 @@ public class Layer implements ILayer {
   }
 
   @Override
+  public void flippedImageH() {
+    this.image.flipImageH();
+  }
+
+  @Override
+  public void flippedImageV() {
+    this.image.flipImageV();
+  }
+
+  @Override
   public void setVisibility(boolean isVisible) {
     this.visibility = isVisible;
   }

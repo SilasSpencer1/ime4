@@ -1,5 +1,7 @@
 package model.image;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 import utils.ImageUtil;
@@ -86,6 +88,36 @@ public class Image implements IImage {
     return imageGrid;
   }
 
+  public BufferedImage getBufferedImage() {
+    int width = this.getWidth();
+    int height = this.getHeight();
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    for (int y = 0; y < this.getImage().length; y += 1) {
+      for (int x = 0; x < this.getImage()[0].length; x += 1) {
+        IPixel pixel = this.getImage()[y][x];
+        Color color = new Color(pixel.getRed(), pixel.getGreen(), pixel.getBlue());
+        image.setRGB(x, y, color.getRGB());
+      }
+    }
+    return image;
+  }
+
+
+  @Override
+  public void flipImageH() {
+
+    for (int row = 0; row<this.image.length; row++){ // Each column is accessed through each row
+      for(int col = 0; col<this.image[0].length/2; col++){ // Access each column for half of the image
+        IPixel temp = this.image[row][(this.image[0].length) - col - 1]; // Holds the opposite value to swap
+        this.image[row][this.image[0].length - col - 1] = this.image[row][col]; // Puts current entry into 'opposite position'
+        this.image[row][col] = temp; // Sets the current entry to that of the 'opposite position'
+      }
+    }
+  }
+
+
+
+
   @Override
   public String getFilename() {
     return this.filename;
@@ -99,6 +131,16 @@ public class Image implements IImage {
   @Override
   public int getWidth() {
     return this.image[0].length;
+  }
+
+  @Override
+  public void flipImageV() {
+
+    for (int row = 0; row<this.image.length/2; row++){ // Working one row at a time and only do half the image!!!
+      IPixel[] temp = this.image[(this.image.length) - row - 1]; // Collect the temp row from the 'other side' of the array
+      this.image[this.image.length - row - 1] = this.image[row]; // Put the current row in the row on the 'other side' of the array
+      this.image[row] = temp; // Now put the row from the other side in the current row
+    }
   }
 
   @Override
